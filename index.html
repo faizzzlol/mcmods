@@ -1,0 +1,36 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Fabric 1.21.5 Mods</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Fabric Mods for Minecraft 1.21.5</h1>
+    <div class="controls">
+      <input type="text" id="search" placeholder="Search mods...">
+      <select id="categoryFilter">
+        <option value="All">All Categories</option>
+        <option value="FPS">FPS Optimization</option>
+        <option value="UI">UI Improvements</option>
+        <option value="Utility">Utility Mods</option>
+        <option value="Shader">Shader Support</option>
+      </select>
+      <select id="compatFilter">
+        <option value="All">All Platforms</option>
+        <option value="Fabric">Fabric</option>
+        <option value="NeoForge">NeoForge</option>
+        <option value="Forge">Forge</option>
+        <option value="Quilt">Quilt</option>
+      </select>
+      <button id="themeToggle">Toggle Theme</button>
+    </div>
+  </header>
+  <main>
+    <div id="modList" class="mod-list"></div>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>
