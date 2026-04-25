@@ -2,7 +2,7 @@
 <html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
-  <title>ModVault — Fabric 1.21.5</title>
+  <title>ModVault — Minecraft Mod Browser</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,61 +11,78 @@
 </head>
 <body>
 
-  <!-- Animated background -->
   <div class="bg-grid"></div>
   <div class="bg-glow"></div>
-
-  <!-- Toast container -->
   <div id="toastContainer" class="toast-container"></div>
-
-  <!-- Scroll to top -->
-  <button class="scroll-top" id="scrollTop" title="Back to top">↑</button>
+  <button class="scroll-top" id="scrollTop">↑</button>
 
   <!-- Modal -->
   <div class="modal-overlay" id="modalOverlay">
-    <div class="modal" id="modal">
+    <div class="modal">
       <button class="modal-close" id="modalClose">✕</button>
       <div class="modal-content" id="modalContent"></div>
     </div>
   </div>
 
-  <!-- Header -->
-  <header class="site-header" id="siteHeader">
+  <!-- ═══════════ HEADER ═══════════ -->
+  <header class="site-header">
     <div class="header-inner">
       <div class="logo">
         <span class="logo-icon">⬡</span>
         <div class="logo-text">
           <span class="logo-title">ModVault</span>
-          <span class="logo-sub">Fabric 1.21.5</span>
+          <span class="logo-sub">Mod Browser</span>
         </div>
-        <div class="version-pill">MC 1.21.5</div>
       </div>
       <div class="header-actions">
-        <button class="btn-icon" id="exportBtn" title="Export selected mods list">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Export List
+        <button class="btn-icon" id="exportBtn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <span class="hide-sm">Export List</span>
         </button>
-        <button class="btn-icon" id="themeToggle" title="Toggle theme">
-          <span id="themeIcon">☀</span>
-        </button>
+        <button class="btn-icon" id="themeToggle"><span id="themeIcon">☀</span></button>
       </div>
     </div>
 
-    <!-- Controls row -->
+    <!-- ── Version + Loader Selector ── -->
+    <div class="version-selector-section">
+      <div class="vs-row">
+        <span class="vs-label">MC Version</span>
+        <div class="version-pills" id="versionPills">
+          <button class="vpill active" data-ver="26.1">
+            26.1 <span class="vpill-tag new">LATEST</span>
+          </button>
+          <button class="vpill" data-ver="1.21.11">
+            1.21.11 <span class="vpill-tag">2025</span>
+          </button>
+          <button class="vpill" data-ver="1.21.5">
+            1.21.5 <span class="vpill-tag old">older</span>
+          </button>
+          <button class="vpill" data-ver="1.21.4">
+            1.21.4 <span class="vpill-tag old">older</span>
+          </button>
+        </div>
+      </div>
+      <div class="vs-row">
+        <span class="vs-label">Loader</span>
+        <div class="loader-pills" id="loaderPills">
+          <button class="lpill active" data-loader="All">All</button>
+          <button class="lpill fabric" data-loader="Fabric">Fabric</button>
+          <button class="lpill quilt" data-loader="Quilt">Quilt</button>
+          <button class="lpill neoforge" data-loader="NeoForge">NeoForge</button>
+          <button class="lpill forge" data-loader="Forge">Forge</button>
+        </div>
+      </div>
+      <div class="ver-note" id="verNote"></div>
+    </div>
+
+    <!-- ── Search + Sort ── -->
     <div class="controls-row">
       <div class="search-wrap">
         <span class="search-icon">⌕</span>
-        <input type="text" id="search" placeholder="Search mods… (Press / to focus)" autocomplete="off" spellcheck="false">
+        <input type="text" id="search" placeholder="Search mods… (press / to focus)" autocomplete="off" spellcheck="false">
         <kbd class="search-kbd">/</kbd>
       </div>
       <div class="control-group">
-        <select id="compatFilter">
-          <option value="All">All Loaders</option>
-          <option value="Fabric">Fabric</option>
-          <option value="Quilt">Quilt</option>
-          <option value="Forge">Forge</option>
-          <option value="NeoForge">NeoForge</option>
-        </select>
         <select id="sortSelect">
           <option value="default">Default Order</option>
           <option value="az">Name A → Z</option>
@@ -79,45 +96,43 @@
       </div>
     </div>
 
-    <!-- Category tabs -->
+    <!-- ── Category Tabs ── -->
     <div class="cat-tabs-wrap">
       <div class="cat-tabs" id="catTabs">
         <button class="cat-tab active" data-cat="All">All <span class="tab-count" id="count-All"></span></button>
         <button class="cat-tab" data-cat="FPS">FPS Boost <span class="tab-count" id="count-FPS"></span></button>
         <button class="cat-tab" data-cat="Utility">Utilities <span class="tab-count" id="count-Utility"></span></button>
-        <button class="cat-tab" data-cat="UI">UI <span class="tab-count" id="count-UI"></span></button>
         <button class="cat-tab" data-cat="Shader">Shaders <span class="tab-count" id="count-Shader"></span></button>
         <button class="cat-tab fav-tab" data-cat="Favorites">★ Favorites <span class="tab-count" id="count-Favorites"></span></button>
         <button class="cat-tab optional-tab" data-cat="Optional">Archived <span class="tab-count" id="count-Optional"></span></button>
       </div>
     </div>
 
-    <!-- Stats bar -->
+    <!-- ── Stats + Bulk ── -->
     <div class="stats-bar">
-      <span id="statsText">Loading mods…</span>
+      <span id="statsText">Loading…</span>
       <div class="bulk-actions" id="bulkActions">
         <span id="selectedCount">0 selected</span>
         <button class="btn-sm" id="selectAllBtn">Select All</button>
         <button class="btn-sm btn-danger" id="clearSelBtn">Clear</button>
-        <button class="btn-sm btn-accent" id="exportSelectedBtn">Export Selected</button>
+        <button class="btn-sm btn-accent-sm" id="exportSelectedBtn">Export Selected</button>
       </div>
     </div>
   </header>
 
-  <!-- Main content -->
   <main class="main-content">
     <div id="modList" class="mod-list grid-view"></div>
-    <div class="empty-state" id="emptyState" style="display:none;">
+    <div class="empty-state" id="emptyState" style="display:none">
       <div class="empty-icon">⬡</div>
       <h3>No mods found</h3>
-      <p>Try adjusting your search or filters</p>
+      <p id="emptyReason">Try adjusting your filters</p>
       <button class="btn-accent" onclick="resetFilters()">Reset Filters</button>
     </div>
   </main>
 
   <footer class="site-footer">
-    <span>ModVault — Fabric 1.21.5 Mod Browser</span>
-    <span>Press <kbd>/</kbd> to search • <kbd>Esc</kbd> to close</span>
+    <span>ModVault — Minecraft Mod Browser</span>
+    <span><kbd>/</kbd> search &nbsp;·&nbsp; <kbd>Esc</kbd> close</span>
   </footer>
 
   <script src="script.js"></script>
